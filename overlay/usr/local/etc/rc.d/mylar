@@ -30,7 +30,7 @@ load_rc_config ${name}
 
 : ${mylar_enable:="NO"}
 : ${mylar_user:="mylar"}
-: ${mylar_dir:="/usr/local/share/mylar"}
+: ${mylar_dir:="/usr/local/mylar"}
 : ${mylar_chdir:="${mylar_dir}"}
 : ${mylar_pid:="${mylar_dir}/mylar.pid"}
 : ${mylar_flags:=""}
