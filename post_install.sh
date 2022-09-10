@@ -2,6 +2,8 @@
 
 : "${MYLAR_APP_DIR:=/usr/local/mylar}"
 
+ln -s /usr/local/bin/python3.9 /usr/local/bin/python
+
 python -m pip install --upgrade pip
 pip install user_agent2
 
