@@ -1,0 +1,80 @@
+#!/bin/sh
+#
+# PROVIDE: mylar
+# REQUIRE: DAEMON mylar
+# KEYWORD: shutdown
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# mylar_enable (bool): Set to NO by default.
+#           Set it to YES to enable it.
+# mylar_user:  The user account mylar daemon runs as what
+#           you want it to be. It uses 'mylar' user by
+#           default. Do not sets it as empty or it will run
+#           as root.
+# mylar_dir:   Directory where mylar lives.
+#           Default: /usr/local/share/mylar
+# mylar_chdir:  Change to this directory before running mylar.
+#     Default is same as mylar_dir.
+# mylar_pid:  The name of the pidfile to create.
+#     Default is mylar.pid in mylar_dir.
+PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
+
+. /etc/rc.subr
+
+name="mylar"
+rcvar=${name}_enable
+
+load_rc_config ${name}
+
+: ${mylar_enable:="NO"}
+: ${mylar_user:="mylar"}
+: ${mylar_dir:="/usr/local/share/mylar"}
+: ${mylar_chdir:="${mylar_dir}"}
+: ${mylar_pid:="${mylar_dir}/mylar.pid"}
+: ${mylar_flags:=""}
+
+status_cmd="${name}_status"
+stop_cmd="${name}_stop"
+
+command_interpreter="python"
+command="${mylar_dir}/Mylar.py"
+command_args="--daemon --pidfile ${mylar_pid} --quiet --nolaunch ${mylar_flags}"
+
+# Ensure user is root when running this script.
+if [ `id -u` != "0" ]; then
+  echo "Oops, you should be root before running this!"
+  exit 1
+fi
+
+verify_mylar_pid() {
+    # Make sure the pid corresponds to the mylar process.
+    if [ -f ${mylar_pid} ]; then
+      pid=`cat ${mylar_pid} 2>/dev/null`
+      ps -p ${pid} | grep -q "python ${mylar_dir}/Mylar.py"
+      return $?
+    else
+      return 0
+    fi
+}
+
+# Try to stop mylar cleanly by sending SIGTERM
+mylar_stop() {
+    echo "Stopping $name."
+    verify_mylar_pid
+    if [ -n "${pid}" ]; then
+      kill ${pid}
+      wait_for_pids ${pid}
+      echo "Stopped."
+    fi
+}
+
+mylar_status() {
+    verify_mylar_pid
+    if [ -n "${pid}" ]; then
+      echo "$name is running as ${pid}."
+    else
+      echo "$name is not running."
+    fi
+}
