@@ -38,7 +38,7 @@ load_rc_config ${name}
 status_cmd="${name}_status"
 stop_cmd="${name}_stop"
 
-command_interpreter="python"
+command_interpreter="${mylar_dir}/bin/python"
 command="${mylar_dir}/Mylar.py"
 command_args="--daemon --pidfile ${mylar_pid} --quiet --nolaunch ${mylar_flags}"
 
@@ -52,7 +52,7 @@ verify_mylar_pid() {
     # Make sure the pid corresponds to the mylar process.
     if [ -f ${mylar_pid} ]; then
       pid=`cat ${mylar_pid} 2>/dev/null`
-      ps -p ${pid} | grep -q "python ${mylar_dir}/Mylar.py"
+      ps -p ${pid} | grep -q "${mylar_dir}/bin/python ${mylar_dir}/Mylar.py"
       return $?
     else
       return 0
