@@ -78,3 +78,5 @@ mylar_status() {
       echo "$name is not running."
     fi
 }
+
+run_rc_command "$1"
