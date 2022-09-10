@@ -11,9 +11,14 @@ cd $MYLAR_APP_DIR || { echo "Clone Mylar failed."; exit 1; }
 
 /usr/local/bin/python -m venv $MYLAR_APP_DIR
 $MYLAR_APP_DIR/bin/python -m pip install --upgrade pip
-$MYLAR_APP_DIR/bin/pip install user_agent2
+$MYLAR_APP_DIR/bin/pip install -r $MYLAR_APP_DIR/requirements.txt
+
+git config --global --add safe.directory vb
 
 mkdir /usr/ports
+
+sed -i '' '1s/^/'#\!\\/usr\\/local\\/mylar\\/bin\\/python\\n/'' $MYLAR_APP_DIR/Mylar.py
+
 chown -R mylar:mylar $MYLAR_APP_DIR
 
 sysrc -f /etc/rc.conf mylar_enable="YES"
