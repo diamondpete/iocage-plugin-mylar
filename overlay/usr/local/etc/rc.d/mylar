@@ -32,7 +32,7 @@ load_rc_config ${name}
 : ${mylar_user:="mylar"}
 : ${mylar_dir:="/usr/local/mylar"}
 : ${mylar_chdir:="${mylar_dir}"}
-: ${mylar_pid:="${mylar_dir}/mylar.pid"}
+: ${mylar_pid:="/var/run/${mylar}/mylar.pid"}
 : ${mylar_flags:=""}
 
 status_cmd="${name}_status"
