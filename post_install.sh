@@ -16,10 +16,12 @@ $MYLAR_APP_DIR/bin/pip install -r $MYLAR_APP_DIR/requirements.txt
 git config --global --add safe.directory vb
 
 mkdir /usr/ports
+mkdir /var/run/mylar
 
 sed -i '' '1s/^/'#\!\\/usr\\/local\\/mylar\\/bin\\/python\\n/'' $MYLAR_APP_DIR/Mylar.py
 
 chown -R mylar:mylar $MYLAR_APP_DIR
+chown -R mylar:mylar /var/run/mylar
 
 sysrc -f /etc/rc.conf mylar_enable="YES"
 
